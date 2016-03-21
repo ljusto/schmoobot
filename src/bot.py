@@ -4,8 +4,8 @@ import glob         # for getting botcogs
 
 import discord
 from discord.ext import commands
-import credentials
-from botcogs.utils import check
+import schmoobot.src.credentials as credentials
+from schmoobot.src.botcogs.utils import check
 
 bot_prefix = "!"
 formatter = commands.HelpFormatter(show_check_failure=False)
@@ -116,12 +116,6 @@ async def reload(extension_name : str):
     await bot.say("Reloaded " + extension_name + " successfully!")
 
 
-#@bot.command(pass_context=True)
-#async def r(context):
-#    """work in progress: remember last command?"""
-#    pass
-
-
 @bot.event
 async def on_message(message):
     # TODO: keep track of whitelisted/blacklisted users
@@ -129,14 +123,7 @@ async def on_message(message):
 
 @bot.event
 async def on_command(command, context):
-    # not even sure why this is here???
+    # not even sure why this is here
     pass
 
-"""
-TODO:
-join
-leave
-load cogs
-modules!
-"""
 bot.run(credentials.email, credentials.password)
