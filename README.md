@@ -1,0 +1,2 @@
+# schmoobot
+Basic Discord bot
