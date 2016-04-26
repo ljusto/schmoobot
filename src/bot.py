@@ -4,8 +4,10 @@ import glob         # for getting botcogs
 
 import discord
 from discord.ext import commands
-import schmoobot.src.credentials as credentials
-from schmoobot.src.botcogs.utils import check
+#import schmoobot.src.credentials as credentials
+import credentials
+from botcogs.utils import check
+#from schmoobot.src.botcogs.utils import check
 
 bot_prefix = "!"
 formatter = commands.HelpFormatter(show_check_failure=False)
@@ -27,7 +29,7 @@ def list_cogs():
     return cog_list
 
 # cogs_list = list_cogs()
-cogs_list = ["botcogs.rng", "botcogs.searches"] # FOR NOW, KEEP A HARDCODED LIST
+cogs_list = ["botcogs.rng", "botcogs.searches", "botcogs.misc", "botcogs.mash", "botcogs.blackjack"] # FOR NOW, KEEP A HARDCODED LIST
 
 
 def load_cog(cog_name : str):
@@ -40,7 +42,6 @@ def load_cog(cog_name : str):
     except (ImportError, discord.ClientException, AttributeError) as e:
         print("Failed to load cog", cog_name, " due to", str(e))
         return
-
 
 @bot.event
 async def on_ready():
@@ -76,6 +77,12 @@ async def load(extension_name : str):
     output = "Loaded " + extension_name + " successfully!"
     await bot.say(output)
 
+"""
+@bot.group(name="set", pass_context=True)
+async def __set__(context):
+    if context.invoked_subcommand is None:
+        pass
+"""
 
 @bot.command()
 @check.is_owner()
@@ -104,6 +111,7 @@ async def unload(extension_name : str):
 @bot.command()
 @check.is_owner()
 async def reload(extension_name : str):
+    extension_name = "botcogs." + extension_name
     if extension_name not in cogs_list:
         await bot.say("Failed to find cog " + str(extension_name))
         return
@@ -115,10 +123,8 @@ async def reload(extension_name : str):
         return
     await bot.say("Reloaded " + extension_name + " successfully!")
 
-
 @bot.event
 async def on_message(message):
-    # TODO: keep track of whitelisted/blacklisted users
     await bot.process_commands(message)
 
 @bot.event
@@ -126,4 +132,11 @@ async def on_command(command, context):
     # not even sure why this is here
     pass
 
+@bot.command()
+@check.is_owner()
+async def bye():
+    await bot.say("Bye-bye!")
+    await bot.logout()
+
 bot.run(credentials.email, credentials.password)
+

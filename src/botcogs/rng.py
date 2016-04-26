@@ -1,4 +1,3 @@
-import discord
 from discord.ext import commands
 import random
 
@@ -29,6 +28,15 @@ class RNG:
             ret = await self.bot.say(str(context.message.author) + " rolled a " + str(random.randint(1, sides)))
         return ret
 
+
+    @commands.command(pass_context=True)
+    async def choose(self, context):
+        "Makes a choice. Separate choices by commas!"
+        # separated by commas!
+        choices = [x.strip() for x in str(context.message.content)[7:].split(',')]
+        return await self.bot.say(str(context.message.author) + " got: " +
+                                  choices[random.randint(0, len(choices) - 1)])
+
     @commands.command(pass_context=True)
     async def coin(self, context):
         """
@@ -46,6 +54,16 @@ class RNG:
         fortune = random.choice(self.fortunes)
         return await self.bot.say(str(context.message.author) + "'s fortune: " +
                                   fortune.rstrip("\n"))
+
+    @commands.command(pass_context=True)
+    async def hug(self, context):
+        gets_hug = random.randint(0,25)
+        hug_messages = ["I'll be your teddy bear, buddy", "come here, let me give you a hug", "here's a hug for you",
+                        "here's a free hug", "it's alright man, it's alright", "a hug today keeps the sad away", "leeeroyyy huggins"]
+        if (not gets_hug):
+            return await self.bot.say(str(context.message.author) + ", you don't deserve a hug.")
+        else:
+            return await self.bot.say(str(context.message.author) + ", " + random.choice(hug_messages))
 
 
 def setup(bot):
